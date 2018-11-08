@@ -1,0 +1,32 @@
+{
+    "manifest_version": 2,
+    "name": "Ekşisözlük Başlık Bildirimcisi",
+    "short_name": "Ekşi Bildirim",
+    "description": "Yeni açılan başlıkları haber verir.",
+    "background": {
+        "page": "background.html"
+    },
+    "content_scripts": [
+        {
+        "matches": [
+            "https://*.google.com/*",
+            "https://eksisozluk.com/*",
+            "https://banabenianlat.net/*,",
+            "https://api.ipgeolocation.io/*"
+            ],
+        "js": ["jquery.js","content.js"],
+        "run_at": "document_start"        
+        }
+    ], 
+    "browser_action": {
+        "default_popup": "index.html"
+    },
+    "version": "0.0.1",
+    "permissions": [
+        "notifications",
+        "storage"
+        ],
+    "icons": { "16": "icon.png",
+        "48": "icon.png",
+       "128": "icon.png" }
+}
