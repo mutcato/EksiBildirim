@@ -1,6 +1,7 @@
+//banabenianlat, arada bildirim olarak çıksın
+//güncellemeler popupda bildirim olarak kendini belli etsin
+
 var storageID;
-
-
 
 /**
  * Gets user id from Chrome storage
