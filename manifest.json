@@ -9,23 +9,23 @@
     "content_scripts": [
         {
         "matches": [
-            "https://*.google.com/*",
             "https://eksisozluk.com/*",
-            "https://banabenianlat.net/*,",
-            "https://api.ipgeolocation.io/*"
+            "https://banabenianlat.net/*"
             ],
         "js": ["jquery.js","content.js"],
         "run_at": "document_start"        
         }
     ], 
     "browser_action": {
-        "default_popup": "index.html"
+        "default_popup": "popup.html"
     },
     "version": "0.0.1",
     "permissions": [
         "notifications",
-        "storage"
+        "storage",
+        "geolocation"
         ],
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
     "icons": { "16": "icon.png",
         "48": "icon.png",
        "128": "icon.png" }

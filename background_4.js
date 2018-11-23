@@ -29,7 +29,7 @@ function StartWithGetChromeStorage(){
                     let str = $(htmlData).find("#top-navigation").find("ul").eq(0).find(".not-mobile").eq(0).find("a").attr("href");
                     
 
-                    if(str!=undefined){ // Evet Ekşi login
+                    if(str!=undefined){ // Evet Google'a login
                         str = str.replace("/biri/", "");
                         EksiID.push(str);
                         // 3) Google DB'de mevcut mu?
@@ -39,7 +39,7 @@ function StartWithGetChromeStorage(){
 
                         },
                             function(data, status){
-                                if(data > 0){ // Evet. Ekşi DB'de Mevcut
+                                if(data > 0){ // Evet. Google DB'de Mevcut
                                     storageID = data;
                                     CreateUserStorage(storageID);
                                     console.log(storageID);
@@ -63,7 +63,7 @@ function StartWithGetChromeStorage(){
                                 }
                             }               
                         );
-                    } else { // Hayır Ekşi login değil.
+                    } else { // Hayır Google'a login değil.
                         $.ajax({
                             url:'https://banabenianlat.net/ChromeExtensions/EksiBildirim/getLastIDFromDB.php',
                             type:'get',
@@ -91,7 +91,7 @@ function StartWithGetChromeStorage(){
                     var htmlData = data;
                     var EksiID = [];
                     let str = $(htmlData).find("#top-navigation").find("ul").eq(0).find(".not-mobile").eq(0).find("a").attr("href");
-                    // EkşiID alınabiliyor mu?
+                    // gmail alınabiliyor mu?
                     if(str!=undefined){  // Alınabiliyor. 
                         //O halde DB'ye gir.
                         str = str.replace("/biri/", "");
@@ -155,8 +155,6 @@ $(document).ready(function(){
     $.getJSON( "https://banabenianlat.net/images/eksibildirim/popup.json", function( sata ) {
         var latest_version = sata['current_version'];
         $.getJSON( "manifest.json", function( data ) {
-            console.log("my version: "+data["version"]);
-            console.log("latest version: "+latest_version);
             if(data['version'] < latest_version){
                 chrome.browserAction.setIcon({path: "icon_update.png"});
             }else{
