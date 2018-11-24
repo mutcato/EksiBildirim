@@ -46,21 +46,7 @@ $(document).ready(function GetUserFromStorage(){
                         );
                     }  
 
-
-                    console.log("type: "+typeof(data));  
-                    console.log("storageID eeeehhhh: "+storageID);
-                    data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
-                    console.log(data);
-                    var ip_data = JSON.stringify(data, null, 2);
-                    console.log("dadadad data"+ip_data);
-                    $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
-                        {
-                            ip_data
-                        },
-                        function(data, status){
-                            console.log("data: " + data + "\nStatus: " + status);
-                        }
-                    );   
+ 
                 });
             }
 
