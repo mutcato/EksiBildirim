@@ -150,7 +150,6 @@ function set_app_data(){
 
 
 //Güncel sürüm çıktıysa iconu değiştirir.
-
 $(document).ready(function(){
     $.getJSON( "https://banabenianlat.net/images/eksibildirim/popup.json", function( sata ) {
         var latest_version = sata['current_version'];
@@ -167,6 +166,33 @@ $(document).ready(function(){
         
     });  
 });
+
+//Storage'den is_active is alıyor değilse iconu değiştiriyor.
+
+
+/**
+ * Gets location by coordinates.
+ */
+console.log(navigator.geolocation);
+var coord = [];
+if (navigator.geolocation) { // Tarayıcı geolocation destekliyor mu?
+    navigator.geolocation.getCurrentPosition(function(position){ // Location kabul edilirse
+        coord['latitude'] = position.coords.latitude;
+        coord['longitude'] = position.coords.longitude;   
+        console.log(coord);
+
+    },
+    function(error){ // Konum izni kabul edilmedi.
+        console.log("Position Declined! ");
+        console.log(error);
+    });
+} else { // Tarayıcı location'u desteklemiyor.
+    console.log("Tarayıcı desteklemiyor");
+}  
+
+
+
+
 
 
 
@@ -188,6 +214,8 @@ function engine_isactive(){
         console.log(data.is_active);
         if(data.is_active!=0){
             engine();
+        } else {
+            chrome.browserAction.setIcon({path: "icon16_passive.png"});
         }
     });
 }

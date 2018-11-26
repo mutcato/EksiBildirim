@@ -29,7 +29,7 @@ $(document).ready(function GetUserFromStorage(){
 
                             data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
                             var ip_data = JSON.stringify(data, null, 2);
-                            $.post("https://www.banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
+                            $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
                                 {
                                     ip_data
                                 },
@@ -43,7 +43,7 @@ $(document).ready(function GetUserFromStorage(){
                             console.log(error);
                             data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
                             var ip_data = JSON.stringify(data, null, 2);
-                            $.post("https://www.banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
+                            $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
                                 {
                                     ip_data
                                 },
@@ -55,7 +55,7 @@ $(document).ready(function GetUserFromStorage(){
                         data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
                         var ip_data = JSON.stringify(data, null, 2);
                         console.log(ip_data);
-                        $.post("https://www.banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
+                        $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
                             {
                                 ip_data
                             },
