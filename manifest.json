@@ -23,10 +23,12 @@
     "permissions": [
         "notifications",
         "storage",
-        "geolocation"
+        "geolocation",
+        "identity", 
+        "identity.email"
         ],
     "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-    "icons": { "16": "icon.png",
-        "48": "icon.png",
-       "128": "icon.png" }
+    "icons": { "16": "icon16.png",
+        "48": "icon48.png",
+       "128": "icon128.png" }
 }

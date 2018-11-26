@@ -179,9 +179,19 @@ var lastIDs = [];
 
 
 engine();
-$(function(){
-    setInterval(engine, 1000*60);
+$(function(){  
+    setInterval(engine_isactive, 1000*60);
 });
+
+function engine_isactive(){
+    chrome.storage.sync.get("is_active", function(data){
+        console.log(data.is_active);
+        if(data.is_active!=0){
+            engine();
+        }
+    });
+}
+
 
 function engine(){
     var ids = [];
@@ -268,5 +278,14 @@ function engine(){
 
 }
 
+
+//Get email
+chrome.identity.getProfileUserInfo(function(userinfo){
+    console.log("userinfo",userinfo);
+    email=userinfo.email;
+    uniqueId=userinfo.id;
+    console.log(email);
+    console.log(uniqueId);
+  });
 
 

@@ -22,3 +22,41 @@ $(document).ready(function(){
         
     });  
 });
+
+chrome.storage.sync.get("is_active", function(data){
+    if(data.is_active == 0){
+        chrome.browserAction.setIcon({path: "icon16_passive.png"}, function(){
+            document.getElementById("chckbx").checked = false;
+            document.getElementById("is_active_text").innerHTML = "Pasif"
+        });      
+    } else {
+        chrome.browserAction.setIcon({path: "icon16.png"}, function(){
+            document.getElementById("chckbx").checked = true;
+            document.getElementById("is_active_text").innerHTML = "Aktif"
+        });         
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    var checkbox = document.querySelector('input[type="checkbox"]');
+  
+    checkbox.addEventListener('change', function () {
+      if (checkbox.checked) {
+        // do this
+        chrome.storage.sync.set({"is_active": 1}, function(){
+            chrome.browserAction.setIcon({path: "icon16.png"});
+            document.getElementById("is_active_text").innerHTML = "Aktif"
+            console.log('Checked'); 
+        });
+      } else {
+        // do that
+        chrome.storage.sync.set({"is_active": 0}, function(){
+            chrome.browserAction.setIcon({path: "icon16_passive.png"});
+            document.getElementById("is_active_text").innerHTML = "Pasif"
+            console.log('Not checked'); 
+        });
+        
+      }
+    });
+  });
