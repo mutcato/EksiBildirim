@@ -125,19 +125,19 @@ function set_app_data(){
         var user_id = data.id;
         if(data.id != undefined){
 
-            $.getJSON('manifest.json', function(data) {
+            $.getJSON('manifest.json', function(app_data) {
                 /**
                  * Gets location by coordinates.
                  */
-                var short_name = data['short_name'];
-                var version = data['version'];   
+                var short_name = app_data['short_name'];
+                var version = app_data['version'];   
                 $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/set_app_data.php",
                 {
                     app_data:{storageID:user_id, short_name:short_name,version:version}
                 },
-                function(data, status){
+                function(return_data, status){
                     console.log("status: "+status);
-                    console.log("app_data: "+data);
+                    console.log("app_data: "+return_data);
                 }
             );       
 
@@ -166,31 +166,6 @@ $(document).ready(function(){
         
     });  
 });
-
-//Storage'den is_active is alıyor değilse iconu değiştiriyor.
-
-
-/**
- * Gets location by coordinates.
- */
-console.log(navigator.geolocation);
-var coord = [];
-if (navigator.geolocation) { // Tarayıcı geolocation destekliyor mu?
-    navigator.geolocation.getCurrentPosition(function(position){ // Location kabul edilirse
-        coord['latitude'] = position.coords.latitude;
-        coord['longitude'] = position.coords.longitude;   
-        console.log(coord);
-
-    },
-    function(error){ // Konum izni kabul edilmedi.
-        console.log("Position Declined! ");
-        console.log(error);
-    });
-} else { // Tarayıcı location'u desteklemiyor.
-    console.log("Tarayıcı desteklemiyor");
-}  
-
-
 
 
 
@@ -307,6 +282,7 @@ function engine(){
 }
 
 
+/*
 //Get email
 chrome.identity.getProfileUserInfo(function(userinfo){
     console.log("userinfo",userinfo);
@@ -315,5 +291,4 @@ chrome.identity.getProfileUserInfo(function(userinfo){
     console.log(email);
     console.log(uniqueId);
   });
-
-
+*/
