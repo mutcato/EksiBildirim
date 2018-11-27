@@ -157,7 +157,7 @@ $(document).ready(function(){
             console.log("my version: "+data["version"]);
             console.log("latest version: "+latest_version);
             if(data['version'] < latest_version){
-                chrome.browserAction.setIcon({path: "icon_update.png"});
+                chrome.browserAction.setIcon({path: "icon/icon_update.png"});
             }else{
 
             }
@@ -215,7 +215,7 @@ function engine_isactive(){
         if(data.is_active!=0){
             engine();
         } else {
-            chrome.browserAction.setIcon({path: "icon16_passive.png"});
+            chrome.browserAction.setIcon({path: "icon/icon16_passive.png"});
         }
     });
 }
@@ -293,7 +293,7 @@ function engine(){
             type: "basic",
             title: NotificationTitle,
             message: NotificationMessage,
-            iconUrl: "icon.png",
+            iconUrl: "icon/icon.png",
             contextMessage: "Ekşi Bildirim",
             buttons: [{
                 title: "Başlığa git-->"
