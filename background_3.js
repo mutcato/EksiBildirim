@@ -1,5 +1,7 @@
-//banabenianlat, arada bildirim olarak çıksın
-//güncellemeler popupda bildirim olarak kendini belli etsin
+// zchrome_url'den son stanby_seconds kadar zaman içindeki urlleri al. içlerinde jsondaki urller varsa çalıştırma yoksa aşağıdaki çalışsın
+// eğer son db'de ikigün içinde rklm url'si yer almıyorsa storage_id'yi create_session.php dosyasına post et.
+// users tablosunda storage_id kolonu aç $_SESSION['storage_id] varsa onu gir
+
 
 var storageID;
 
@@ -176,10 +178,12 @@ $(document).ready(function(){
 
 var messages = new Array();
 var lastIDs = [];
+var sayac = 0;
 
 
 
 engine();
+
 $(function(){  
     setInterval(engine_isactive, 1000*60);
 });
@@ -189,11 +193,13 @@ function engine_isactive(){
         console.log(data.is_active);
         if(data.is_active!=0){
             engine();
+            console.log(sayac);
         } else {
             chrome.browserAction.setIcon({path: "icon/icon16_passive.png"});
         }
     });
 }
+
 
 
 function engine(){
@@ -243,13 +249,13 @@ function engine(){
                 let topic_id = ids.indexOf(new_ids[i]);
                 new_topics[i] = messages[topic_id];
                 if((messages[topic_id][1].includes("?day=")==false) && messages[topic_id][2]<=5){
-                    NotificationBasic(messages[topic_id][0], 'Yeni başlık', messages[topic_id][1]);
+                    NotificationBasic(messages[topic_id][0], 'Yeni başlık', "https://eksisozluk.com"+messages[topic_id][1]);
                 }
             }
             chrome.notifications.onButtonClicked.addListener(function(notifId){
                 for(let myNotification of myNotifications){
                      if(notifId == myNotification.nid){
-                        window.open("https://eksisozluk.com"+myNotification.nhref); 
+                        window.open(myNotification.nhref); 
                     }                    
                 }
      
@@ -259,27 +265,41 @@ function engine(){
             console.log("birden büyük");
         }
         
+        function NotificationBasic(NotificationTitle, NotificationMessage, href){
+            var options = {
+                type: "basic",
+                title: NotificationTitle,
+                message: NotificationMessage,
+                iconUrl: "icon/icon.png",
+                contextMessage: "Ekşi Bildirim",
+                buttons: [{
+                    title: "Başlığa git-->"
+                }]
+            };
+            chrome.notifications.create(options, function(id){
+                myNotifications.push({nid:id, nhref:href});
+            });
+        }
 
+        if(sayac>0){reklm();} // belirli bir dakika sonra reklm fonksiyonu çalışır.
+        function reklm(){
+            $.getJSON( "https://banabenianlat.net/images/eksibildirim/reklm.json", function( reklm_data ) {
+                for(oge of reklm_data.reklm){
+                    console.log(oge);
+                    //is_visited_in_last_days();
+                    NotificationBasic(oge["title"], "Destek", oge["url"]);
+                }
+            }, function(error){
+                console.log(error);
+            });  
+        }
+        sayac += 1;
 
     })
 
-    function NotificationBasic(NotificationTitle, NotificationMessage, href){
-        var options = {
-            type: "basic",
-            title: NotificationTitle,
-            message: NotificationMessage,
-            iconUrl: "icon/icon.png",
-            contextMessage: "Ekşi Bildirim",
-            buttons: [{
-                title: "Başlığa git-->"
-            }]
-        };
-        chrome.notifications.create(options, function(id){
-            myNotifications.push({nid:id, nhref:href});
-        });
-    }
-
 }
+
+
 
 
 /*
