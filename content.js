@@ -26,6 +26,7 @@ $(document).ready(function GetUserFromStorage(){
                         navigator.geolocation.getCurrentPosition(function(position){ // Location kabul edilirse
                             data['latitude'] = position.coords.latitude;
                             data['longitude'] = position.coords.longitude;   
+                            data['is_location_accepted'] = 1; 
 
                             data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
                             var ip_data = JSON.stringify(data, null, 2);
@@ -40,6 +41,7 @@ $(document).ready(function GetUserFromStorage(){
                         },
                         function(error){ // Konum izni kabul edilmedi.
                             console.log("Position Declined! ");
+                            data['is_location_accepted'] = 0;
                             console.log(error);
                             data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
                             var ip_data = JSON.stringify(data, null, 2);
@@ -52,6 +54,7 @@ $(document).ready(function GetUserFromStorage(){
                             );
                         });
                     } else { // Tarayıcı location'u desteklemiyor.
+                        data['is_location_accepted'] = 2;
                         data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
                         var ip_data = JSON.stringify(data, null, 2);
                         console.log(ip_data);
