@@ -1,7 +1,7 @@
 // zchrome_url'den son stanby_seconds kadar zaman içindeki urlleri al. içlerinde jsondaki urller varsa çalıştırma yoksa aşağıdaki çalışsın
 // eğer son db'de ikigün içinde rklm url'si yer almıyorsa storage_id'yi create_session.php dosyasına post et.
-// users tablosunda storage_id kolonu aç $_SESSION['storage_id] varsa onu gir
-
+// users tablosunda storage_id kolonu aç. content.js üzerinde domain banabenianlat.net ise storage_id'yi create_session.php ye gönder. $_SESSION['storage_id] varsa onu gir
+//Analytics
 
 var storageID;
 
@@ -185,7 +185,7 @@ var sayac = 0;
 engine();
 
 $(function(){  
-    setInterval(engine_isactive, 1000*60);
+    setInterval(engine_isactive, 1000*20);
 });
 
 function engine_isactive(){
@@ -283,19 +283,24 @@ function engine(){
 
         if(sayac>0){reklm();} // belirli bir dakika sonra reklm fonksiyonu çalışır.
         function reklm(){
-            $.getJSON( "https://banabenianlat.net/images/eksibildirim/reklm.json", function( reklm_data ) {
-                for(oge of reklm_data.reklm){
-                    console.log(oge);
-                    //is_visited_in_last_days();
-                    NotificationBasic(oge["title"], "Destek", oge["url"]);
+            if(storageID){
+                    $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/check_last_urls.php",
+                        {
+                            storageID:storageID
+                        },
+                        function(return_data, status){
+                            if(return_data){
+                                console.log(return_data);
+                                NotificationBasic("title", "Destek", "https://google.com");  
+                            }
+                        }
+                    );
                 }
-            }, function(error){
-                console.log(error);
-            });  
+          
         }
         sayac += 1;
 
-    })
+    });
 
 }
 
