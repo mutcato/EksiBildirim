@@ -12,7 +12,7 @@
             "https://eksisozluk.com/*",
             "https://banabenianlat.net/*"
             ],
-        "js": ["jquery.js","content.js"],
+        "js": ["tracker.js","jquery.js","content.js"],
         "run_at": "document_start"        
         }
     ], 
