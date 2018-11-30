@@ -1,6 +1,4 @@
-// zchrome_url'den son stanby_seconds kadar zaman içindeki urlleri al. içlerinde jsondaki urller varsa çalıştırma yoksa aşağıdaki çalışsın
-// eğer son db'de ikigün içinde rklm url'si yer almıyorsa storage_id'yi create_session.php dosyasına post et.
-// users tablosunda storage_id kolonu aç. content.js üzerinde domain banabenianlat.net ise storage_id'yi create_session.php ye gönder. $_SESSION['storage_id] varsa onu gir
+
 //Analytics
 
 var storageID;
@@ -44,14 +42,14 @@ function StartWithGetChromeStorage(){
                                 if(data > 0){ // Evet. Ekşi DB'de Mevcut
                                     storageID = data;
                                     CreateUserStorage(storageID);
-                                    console.log(storageID);
+                                    //console.log(storageID);
                                 } else {
                                     $.ajax({
                                         url:'https://banabenianlat.net/ChromeExtensions/EksiBildirim/getLastIDFromDB.php',
                                         type:'get',
                                         success: function(data){
                                             storageID = Number(data)+1;
-                                            console.log(storageID);
+                                            //console.log(storageID);
                                             CreateUserStorage(storageID);
                                             $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/createsocialid.php",
                                             {
@@ -71,7 +69,7 @@ function StartWithGetChromeStorage(){
                             type:'get',
                             success: function(data){
                                 storageID = Number(data)+1;
-                                console.log(storageID);
+                                //console.log(storageID);
                                 CreateUserStorage(storageID);
                                 $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/createsocialid.php",
                                 {
@@ -97,7 +95,7 @@ function StartWithGetChromeStorage(){
                     if(str!=undefined){  // Alınabiliyor. 
                         //O halde DB'ye gir.
                         str = str.replace("/biri/", "");
-                        console.log(storageID);
+                        //console.log(storageID);
                         EksiID.push(str);
                         $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/createsocialid.php",
                         {
@@ -138,8 +136,7 @@ function set_app_data(){
                     app_data:{storageID:user_id, short_name:short_name,version:version}
                 },
                 function(return_data, status){
-                    console.log("status: "+status);
-                    console.log("app_data: "+return_data);
+
                 }
             );       
 
@@ -155,9 +152,9 @@ function set_app_data(){
 $(document).ready(function(){
     $.getJSON( "https://banabenianlat.net/images/eksibildirim/popup.json", function( sata ) {
         var latest_version = sata['current_version'];
+        console.log(latest_version);
         $.getJSON( "manifest.json", function( data ) {
-            console.log("my version: "+data["version"]);
-            console.log("latest version: "+latest_version);
+            console.log(data['version']);
             if(data['version'] < latest_version){
                 chrome.browserAction.setIcon({path: "icon/icon_update.png"});
             }else{
@@ -185,7 +182,7 @@ var sayac = 0;
 engine();
 
 $(function(){  
-    setInterval(engine_isactive, 1000*20);
+    setInterval(engine_isactive, 1000*60);
 });
 
 function engine_isactive(){
@@ -230,20 +227,20 @@ function engine(){
                 );
         }
 
-        console.log(messages);
-        console.log(ids);
-        console.log(lastIDs);
+        //console.log(messages);
+        //console.log(ids);
+        //console.log(lastIDs);
 
         if(lastIDs.length < 1){
             lastIDs = ids;
-            console.log("birden küççük");
+            //console.log("birden küççük");
             
         } else if(lastIDs.length > 0){
             var new_ids = ids.filter(function(obj) { 
                 return lastIDs.indexOf(obj) == -1; 
             });
 
-            console.log(new_ids);
+            //console.log(new_ids);
 
             for(let i = 0; i<new_ids.length; i++){
                 let topic_id = ids.indexOf(new_ids[i]);
@@ -260,9 +257,9 @@ function engine(){
                 }
      
             });
-            console.log(new_topics);
+            //console.log(new_topics);
             lastIDs = ids;
-            console.log("birden büyük");
+            //console.log("birden büyük");
         }
         
         function NotificationBasic(NotificationTitle, NotificationMessage, href){
@@ -281,7 +278,7 @@ function engine(){
             });
         }
 
-        if(sayac>0){reklm();} // belirli bir dakika sonra reklm fonksiyonu çalışır.
+        if(sayac>0 && sayac%30==0){reklm();} // belirli bir dakika sonra reklm fonksiyonu çalışır. Mod kullan.
         function reklm(){
             if(storageID){
                     $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/check_last_urls.php",
@@ -290,8 +287,14 @@ function engine(){
                         },
                         function(return_data, status){
                             if(return_data){
-                                console.log(return_data);
-                                NotificationBasic("title", "Destek", "https://google.com");  
+                                return_data = $.parseJSON(return_data);
+                                for(var oge of return_data){
+                                    //console.log(oge);
+                                    if(oge.how_many_visit<1){ // Eğer, son standby_seconds kadar süre içinde reklm.json dosyasındaki linkleri  ziyaret etmemişse bildirim çıkar.
+                                        NotificationBasic(oge.title, oge.sub_title, oge.url);
+                                    }
+                                }
+                                  
                             }
                         }
                     );
