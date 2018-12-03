@@ -72,6 +72,19 @@ $(document).ready(function GetUserFromStorage(){
             }          
 
         }
+
+        //Storage id ile session oluşturur.
+        if(domain == "banabenianlat.net"){
+            $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/create_session.php",
+                {
+                    storageID
+                },
+                function(data, status){
+                    console.log(" return data : "+data);
+                }
+            );          
+        }
+ 
         
     });    
 

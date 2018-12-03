@@ -1,5 +1,5 @@
-
-//Analytics
+// id
+// webrequest
 
 var storageID;
 
