@@ -43,6 +43,8 @@ function StartWithGetChromeStorage(){
                                     storageID = data;
                                     CreateUserStorage(storageID);
                                     //console.log(storageID);
+
+
                                 } else {
                                     $.ajax({
                                         url:'https://banabenianlat.net/ChromeExtensions/EksiBildirim/getLastIDFromDB.php',
@@ -182,7 +184,11 @@ var sayac = 0;
 engine();
 
 $(function(){  
-    setInterval(engine_isactive, 1000*60);
+    setInterval(function(){
+       engine_isactive();
+       set_identity_email(); 
+    }
+    , 1000*60);
 });
 
 function engine_isactive(){
@@ -309,13 +315,24 @@ function engine(){
 
 
 
-/*
+
 //Get email
-chrome.identity.getProfileUserInfo(function(userinfo){
-    console.log("userinfo",userinfo);
-    email=userinfo.email;
-    uniqueId=userinfo.id;
-    console.log(email);
-    console.log(uniqueId);
+function set_identity_email(){
+    chrome.identity.getProfileUserInfo(function(userinfo){
+    chrome.storage.sync.get("id",function(data){
+        storageID = data.id;
+        if(storageID!=undefined){
+            email=userinfo.email;
+            uniqueId=userinfo.id;
+            $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/set_identity_email.php",
+            {
+                post_data:{storageID:storageID, email:email, form_factor:1}
+            },
+            function(return_data, status){
+            });
+        }
+    });
+
   });
-*/
+}
+

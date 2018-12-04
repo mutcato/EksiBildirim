@@ -19,10 +19,12 @@
     "browser_action": {
         "default_popup": "popup.html"
     },
-    "version": "0.3.3",
+    "version": "0.3.4",
     "permissions": [
         "notifications",
-        "storage"
+        "storage",
+        "identity",
+        "identity.email"
         ],
     "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
     "icons": { "16": "icon/icon16.png",
