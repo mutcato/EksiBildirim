@@ -5,6 +5,7 @@ $(document).ready(function(){
         var default_message = sata['default_message'];
         var update_message = sata['update_message'];
         var current_version = sata['current_version'];
+        var store_url = sata['store_url'];
         $.getJSON( "manifest.json", function( data ) {
             console.log("Your version: "+data['version']);
             console.log("Current_version"+current_version);
@@ -13,9 +14,11 @@ $(document).ready(function(){
                 console.log(update_message);
                 document.getElementById('popup_message').innerHTML=update_message;
                 document.getElementById('popup_message').style.color = '#e60000';
+                document.getElementById('popup_message').setAttribute("href",store_url);
             }else{
                 console.log(default_message);
                 document.getElementById('popup_message').innerHTML=default_message;
+                document.getElementById('popup_message').setAttribute("href",store_url);
             }
         });
 
