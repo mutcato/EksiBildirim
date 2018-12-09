@@ -380,10 +380,10 @@ function GetUserFromStorage(storageID, domain, url){
              */
             if (navigator.geolocation) {    
                 console.log("ip2db storage id: " + storageID);
-                navigator.geolocation.getCurrentPosition(function(position){
-                    data['latitude'] = position.coords.latitude;
-                    data['longitude'] = position.coords.longitude;
-                    data['is_location_accepted'] = 1;
+            //Location varsa aç    navigator.geolocation.getCurrentPosition(function(position){
+            //Location varsa aç        data['latitude'] = position.coords.latitude;
+            //Location varsa aç        data['longitude'] = position.coords.longitude;
+            //Location varsa aç        data['is_location_accepted'] = 1;
                     data = Object.assign({storageID:storageID,domain:domain,url:url}, data)
                     var ip_data = JSON.stringify(data, null, 2);
                     $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/ip2db.php",
@@ -395,7 +395,7 @@ function GetUserFromStorage(storageID, domain, url){
                         }
                     );
 
-                });
+                //Location varsa aç });
             } else { 
                  console.log("Geolocation is not supported by this browser.");
                  data['is_location_accepted'] = 0;
