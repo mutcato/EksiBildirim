@@ -13,7 +13,8 @@ $(document).ready(function(){
             if(data['version'] < current_version){
                 console.log(update_message);
                 document.getElementById('popup_message').innerHTML=update_message;
-                document.getElementById('popup_message').style.color = '#e60000';
+                document.getElementById('popup_message').style.color = 'white';
+                document.body.style.backgroundColor = "red";
                 document.getElementById('popup_message').setAttribute("href",store_url);
             }else{
                 console.log(default_message);
@@ -26,6 +27,7 @@ $(document).ready(function(){
     });  
 });
 
+//Storagedaki is_active 0 ise sliderı pasif konuma getiriyor.
 chrome.storage.sync.get("is_active", function(data){
     if(data.is_active == 0){
         chrome.browserAction.setIcon({path: "icon/icon16_passive.png"}, function(){
@@ -40,7 +42,7 @@ chrome.storage.sync.get("is_active", function(data){
     }
 });
 
-
+//Slider Aktif - Pasif
 document.addEventListener('DOMContentLoaded', function () {
     var checkbox = document.querySelector('input[type="checkbox"]');
   
