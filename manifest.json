@@ -20,7 +20,7 @@
     "browser_action": {
         "default_popup": "popup.html"
     },
-    "version": "0.4.3",
+    "version": "0.4.4",
     "permissions": [
         "notifications",
         "storage",
